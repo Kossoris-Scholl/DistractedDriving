@@ -2,7 +2,7 @@ import csv
 import config
 import sys
 
-def heartRateNormalizer(data):
+def normalizer(data):
     minHR = float(sys.maxsize)
     maxHR = float(-1)
 
@@ -47,6 +47,9 @@ for file in configs.fileNames:
         for key in row:
             columnData[key].append(row[key])
 
-    columnData["Heart.Rate"] = heartRateNormalizer(columnData["Heart.Rate"])
-
-
+    columnData["Palm.EDA"] = normalizer(columnData["Palm.EDA"])
+    columnData["Heart.Rate"] = normalizer(columnData["Heart.Rate"])
+    columnData["Breathing.Rate"] = normalizer(columnData["Breathing.Rate"])
+    columnData["Perinasal.Perspiration"] = normalizer(columnData["Perinasal.Perspiration"])
+    columnData["Lft.Pupil.Diameter"] = normalizer(columnData["Lft.Pupil.Diameter"])
+    columnData["Rt.Pupil.Diameter"] = normalizer(columnData["Rt.Pupil.Diameter"])
