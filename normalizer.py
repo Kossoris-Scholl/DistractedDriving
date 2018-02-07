@@ -3,17 +3,17 @@ import config
 import sys
 
 def normalizer(data):
-    minHR = float(sys.maxsize)
-    maxHR = float(-1)
+    minHR = sys.maxsize
+    maxHR = -1
 
     for hr in data:
         try:
             hr = float(hr)
             if hr != 0:
                 if hr < minHR:
-                    minHR = float(hr)
+                    minHR = hr
                 if hr > maxHR:
-                    maxHR = float(hr)
+                    maxHR = hr
         except ValueError:
             pass
 
