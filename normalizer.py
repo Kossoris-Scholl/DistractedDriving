@@ -33,6 +33,7 @@ configs = config.Config()
 
 
 for file in configs.fileNames:
+    originalName = file
     file = configs.localPath + file
 
     columnData = {}
@@ -47,9 +48,18 @@ for file in configs.fileNames:
         for key in row:
             columnData[key].append(row[key])
 
+
     columnData["Palm.EDA"] = normalizer(columnData["Palm.EDA"])
     columnData["Heart.Rate"] = normalizer(columnData["Heart.Rate"])
     columnData["Breathing.Rate"] = normalizer(columnData["Breathing.Rate"])
     columnData["Perinasal.Perspiration"] = normalizer(columnData["Perinasal.Perspiration"])
     columnData["Lft.Pupil.Diameter"] = normalizer(columnData["Lft.Pupil.Diameter"])
     columnData["Rt.Pupil.Diameter"] = normalizer(columnData["Rt.Pupil.Diameter"])
+    
+    csvFileName = 'Normalized_' + originalName
+
+    keys = configs.columnNames
+    with open('../NormalizedData/'+csvFileName, 'w', newline='', encoding='utf-8') as csvfile:
+        writer = csv.writer(csvfile, delimiter = ',')
+        writer.writerows(zip(*[columnData[key] for key in keys]))
+
