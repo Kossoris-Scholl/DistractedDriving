@@ -5,6 +5,7 @@ configs = config.Config()
 
 print(configs.fileNames)
 
+
 for file in configs.fileNames:
     file = configs.localPath + file
 
@@ -19,3 +20,5 @@ for file in configs.fileNames:
     for row in dictReader:
         for key in row:
             columns[key].append(row[key])
+
+
