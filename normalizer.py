@@ -2,18 +2,18 @@ import csv
 import config
 import sys
 
-def normalizer(data):
-    minHR = float(sys.maxsize)
-    maxHR = float(-1)
+def normalizer(data, keys):
+    minimum = float(sys.maxsize)
+    maximum = float(-1)
 
-    for hr in data:
+    for value in data:
         try:
-            hr = float(hr)
-            if hr != 0:
-                if hr < minHR:
-                    minHR = float(hr)
-                if hr > maxHR:
-                    maxHR = float(hr)
+            value = float(value)
+            if value != 0:
+                if value < minimum:
+                    minimum = float(value)
+                if value > maximum:
+                    maximum = float(value)
         except ValueError:
             pass
 
@@ -23,9 +23,12 @@ def normalizer(data):
             if data[i] == 0:
                 data[i] = -1
             else:
-                data[i] = (data[i] - minHR) / (maxHR - minHR)
+                data[i] = (data[i] - minimum) / (maximum - minimum)
         except ValueError:
-            data[i] = -1
+            if data[i] not in keys:
+                data[i] = -1
+            else:
+                pass
 
     return data
 
@@ -48,17 +51,16 @@ for file in configs.fileNames:
         for key in row:
             columnData[key].append(row[key])
 
-
-    columnData["Palm.EDA"] = normalizer(columnData["Palm.EDA"])
-    columnData["Heart.Rate"] = normalizer(columnData["Heart.Rate"])
-    columnData["Breathing.Rate"] = normalizer(columnData["Breathing.Rate"])
-    columnData["Perinasal.Perspiration"] = normalizer(columnData["Perinasal.Perspiration"])
-    columnData["Lft.Pupil.Diameter"] = normalizer(columnData["Lft.Pupil.Diameter"])
-    columnData["Rt.Pupil.Diameter"] = normalizer(columnData["Rt.Pupil.Diameter"])
-    
-    csvFileName = 'Normalized_' + originalName
-
     keys = configs.columnNames
+
+    columnData["Palm.EDA"] = normalizer(columnData["Palm.EDA"], keys)
+    columnData["Heart.Rate"] = normalizer(columnData["Heart.Rate"], keys)
+    columnData["Breathing.Rate"] = normalizer(columnData["Breathing.Rate"], keys)
+    columnData["Perinasal.Perspiration"] = normalizer(columnData["Perinasal.Perspiration"], keys)
+    columnData["Lft.Pupil.Diameter"] = normalizer(columnData["Lft.Pupil.Diameter"], keys)
+    columnData["Rt.Pupil.Diameter"] = normalizer(columnData["Rt.Pupil.Diameter"], keys)
+
+    csvFileName = 'Normalized_' + originalName
     with open('../NormalizedData/'+csvFileName, 'w', newline='', encoding='utf-8') as csvfile:
         writer = csv.writer(csvfile, delimiter = ',')
         writer.writerows(zip(*[columnData[key] for key in keys]))
