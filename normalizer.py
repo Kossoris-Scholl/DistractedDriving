@@ -9,11 +9,11 @@ def normalizer(data, keys):
     for value in data:
         try:
             value = float(value)
-            if value != 0:
-                if value < minimum:
-                    minimum = float(value)
-                if value > maximum:
-                    maximum = float(value)
+            # if value != 0: plus indents
+            if value < minimum:
+                minimum = float(value)
+            if value > maximum:
+                maximum = float(value)
         except ValueError:
             pass
 
@@ -53,10 +53,21 @@ for file in configs.fileNames:
 
     keys = configs.columnNames
 
+    print(file)
+
     columnData["Palm.EDA"] = normalizer(columnData["Palm.EDA"], keys)
     columnData["Heart.Rate"] = normalizer(columnData["Heart.Rate"], keys)
     columnData["Breathing.Rate"] = normalizer(columnData["Breathing.Rate"], keys)
     columnData["Perinasal.Perspiration"] = normalizer(columnData["Perinasal.Perspiration"], keys)
+    columnData["Speed"] = normalizer(columnData["Speed"], keys)
+    columnData["Acceleration"] = normalizer(columnData["Acceleration"], keys)
+    columnData["Brake"] = normalizer(columnData["Brake"], keys)
+    columnData["Steering"] = normalizer(columnData["Steering"], keys)
+    columnData["LaneOffset"] = normalizer(columnData["LaneOffset"], keys)
+    columnData["Lane.Position"] = normalizer(columnData["Lane.Position"], keys)
+    columnData["Distance"] = normalizer(columnData["Distance"], keys)
+    columnData["Gaze.X.Pos"] = normalizer(columnData["Gaze.X.Pos"], keys)
+    columnData["Gaze.Y.Pos"] = normalizer(columnData["Gaze.Y.Pos"], keys)
     columnData["Lft.Pupil.Diameter"] = normalizer(columnData["Lft.Pupil.Diameter"], keys)
     columnData["Rt.Pupil.Diameter"] = normalizer(columnData["Rt.Pupil.Diameter"], keys)
 
