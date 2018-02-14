@@ -1,10 +1,24 @@
-import csv
 import pandas as pd
 
-def rolling_mean(columnData, window_size):
-    df = pd.DataFrame(data=columnData)
-    df['Heart.Rate'] = df.rolling(window_size).mean()
-    # print(df)
+def rolling_mean(file, window_size):
+    df = pd.read_csv(file)
+
+    df['Palm.EDA'] = df.rolling(window_size).mean()['Palm.EDA']
+    df['Heart.Rate'] = df.rolling(window_size).mean()['Heart.Rate']
+    df['Breathing.Rate'] = df.rolling(window_size).mean()['Breathing.Rate']
+    df['Perinasal.Perspiration'] = df.rolling(window_size).mean()['Perinasal.Perspiration']
+    df['Speed'] = df.rolling(window_size).mean()['Speed']
+    df['Acceleration'] = df.rolling(window_size).mean()['Acceleration']
+    df['Brake'] = df.rolling(window_size).mean()['Brake']
+    df['Steering'] = df.rolling(window_size).mean()['Steering']
+    df['LaneOffset'] = df.rolling(window_size).mean()['LaneOffset']
+    df['Lane.Position'] = df.rolling(window_size).mean()['Lane.Position']
+    df['Distance'] = df.rolling(window_size).mean()['Distance']
+    df['Gaze.X.Pos'] = df.rolling(window_size).mean()['Gaze.X.Pos']
+    df['Gaze.Y.Pos'] = df.rolling(window_size).mean()['Gaze.Y.Pos']
+    df['Lft.Pupil.Diameter'] = df.rolling(window_size).mean()['Lft.Pupil.Diameter']
+    df['Rt.Pupil.Diameter'] = df.rolling(window_size).mean()['Rt.Pupil.Diameter']
+
     return df
 
 path = '../NormalizedData/'
@@ -18,31 +32,14 @@ for x in range(10, 89):
     if x not in omitted:
         fileNames.append("Normalized_T0" + str(x) + ".csv")
 
-columnNames = ["Time", "Drive", "Stimulus", "Failure", "Palm.EDA", "Heart.Rate", "Breathing.Rate",
-               "Perinasal.Perspiration", "Speed", "Acceleration", "Brake", "Steering", "LaneOffset",
-               "Lane.Position", "Distance", "Gaze.X.Pos", "Gaze.Y.Pos", "Lft.Pupil.Diameter",
-               "Rt.Pupil.Diameter"]
-
 window_size = int(input('Enter a window size: '))
 
 for file in fileNames:
 
     originalName = file
     file = path + file
-    columnData = {}
 
-    for columnName in columnNames:
-        columnData[columnName] = []
-
-    dictReader = csv.DictReader(open(file, 'rt'), fieldnames=columnNames,
-                                delimiter=',', quotechar='"')
-
-    for row in dictReader:
-        for key in row:
-            columnData[key].append(row[key])
-
-    keys = columnNames
     csvFileName = 'Averaged_' + originalName
 
-    df = rolling_mean(columnData, window_size)
+    df = rolling_mean(file, window_size)
     df.to_csv('../RollingAverageData/' + csvFileName, sep=',')
