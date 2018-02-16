@@ -10,7 +10,6 @@ def normalizer(data, key):
     for value in data:
         try:
             value = float(value)
-            # if value != 0: plus indents
             if value < minimum:
                 minimum = value
             if value > maximum:
@@ -23,6 +22,8 @@ def normalizer(data, key):
             data[i] = float(data[i])
             if data[i] == 0:
                 data[i] = -1
+            elif maximum == minimum: #look at interpolated t007 for an example of why this is the case we could just make a req that all values must be there to keep the row
+                data[i] = 1
             else:
                 data[i] = (data[i] - minimum) / (maximum - minimum)
         except ValueError:
@@ -47,8 +48,8 @@ for file in configs.fileNames:
         columnData[columnName] = []
 
     df = pd.read_csv(file)
-    df = df.interpolate()
-    df = df.dropna(how='any', axis=0)
+    df = df.interpolate(limit = 10)
+    df = df.dropna(thresh = 10) #at least ten (minus 4) values required in a row to keep the row
     df.to_csv('../InterpolatedData/Interpolated_' + originalName, index=False)
 
     dictReader = csv.DictReader(open('../InterpolatedData/Interpolated_' + originalName, 'rt'), fieldnames=configs.columnNames,
