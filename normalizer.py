@@ -48,8 +48,8 @@ for file in configs.fileNames:
         columnData[columnName] = []
 
     df = pd.read_csv(file)
-    df = df.interpolate(limit = 10)
-    df = df.dropna(thresh = 10) #at least ten (minus 4) values required in a row to keep the row
+    df = df.interpolate(limit = configs.limit)
+    df = df.dropna(thresh = configs.thresh) #at least ten (minus 4) values required in a row to keep the row
     df.to_csv('../InterpolatedData/Interpolated_' + originalName, index=False)
 
     dictReader = csv.DictReader(open('../InterpolatedData/Interpolated_' + originalName, 'rt'), fieldnames=configs.columnNames,
