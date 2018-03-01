@@ -61,11 +61,11 @@ for file in configs.fileNames:
     #after interpolation, remove rows with missing data in specified amount of columns
     df = df.dropna(thresh = configs.thresh) #at least ten (minus 4) values required in a row to keep the row
 
-    df.to_csv('../InterpolatedData/Interpolated_' + originalName, index=False)
+    df.to_csv(configs.localPathInterpolated + 'Interpolated_' + originalName, index=False)
 
 
     ###process normalization
-    dictReader = csv.DictReader(open('../InterpolatedData/Interpolated_' + originalName, 'rt'), fieldnames=configs.columnNames,
+    dictReader = csv.DictReader(open(configs.localPathInterpolated + 'Interpolated_' + originalName, 'rt'), fieldnames=configs.columnNames,
                                 delimiter=',', quotechar='"')
 
     for row in dictReader:
@@ -75,7 +75,7 @@ for file in configs.fileNames:
     for i in range(4,19):
         columnData[keys[i]] = normalizer(columnData[keys[i]], keys[i])
 
-    with open('../NormalizedData/Normalized_' + originalName, 'w', newline='', encoding='utf-8') as csvfile:
+    with open(configs.localPathNormalized + 'Normalized_' + originalName, 'w', newline='', encoding='utf-8') as csvfile:
         writer = csv.writer(csvfile, delimiter = ',')
         writer.writerows(zip(*[columnData[key] for key in keys]))
 
