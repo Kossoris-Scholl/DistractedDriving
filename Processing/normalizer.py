@@ -1,8 +1,11 @@
 import csv
-import config
 import sys
-import pandas as pd
+
 import numpy as np
+import pandas as pd
+
+from Processing import config
+
 
 ###function to normalize data between zero and one
 def normalizer(data, key):
@@ -22,16 +25,12 @@ def normalizer(data, key):
     for i in range(len(data)):
         try:
             data[i] = float(data[i])
-            if data[i] == 0:
-                data[i] = -1
-            elif maximum == minimum: #look at interpolated t007 for an example of why this is the case we could just make a req that all values must be there to keep the row
+            if maximum == minimum: #look at interpolated t007 for an example of why this is the case we could just make a req that all values must be there to keep the row
                 data[i] = 1
             else:
                 data[i] = (data[i] - minimum) / (maximum - minimum)
         except ValueError:
-            if data[i] != key:
-                data[i] = -1
-            else:
+            if data[i] == key:
                 pass
 
     return data

@@ -1,6 +1,9 @@
-import pandas as pd
-import config
 import csv
+
+import pandas as pd
+
+from Processing import config
+
 
 ###function to take window average over the normalized data
 def rolling_mean(file, columnData, window_size):
