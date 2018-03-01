@@ -13,4 +13,7 @@ __pycache__/config.cpython-36.pyc
 .idea/inspectionProfiles/profiles_settings.xml
 __pycache__/config.cpython-35.pyc
 
+.DS_Store
+Processing/__pycache__/config.cpython-35.pyc
+
 config.py
