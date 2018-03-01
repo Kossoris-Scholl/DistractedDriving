@@ -1,19 +1,20 @@
 import csv
 import config
 import sys
+import pandas as pd
 
-def normalizer(data):
-    minHR = sys.maxsize
-    maxHR = -1
 
-    for hr in data:
+def normalizer(data, key):
+    minimum = float(sys.maxsize)
+    maximum = float(-1)
+
+    for value in data:
         try:
-            hr = float(hr)
-            if hr != 0:
-                if hr < minHR:
-                    minHR = hr
-                if hr > maxHR:
-                    maxHR = hr
+            value = float(value)
+            if value < minimum:
+                minimum = value
+            if value > maximum:
+                maximum = value
         except ValueError:
             pass
 
@@ -22,10 +23,15 @@ def normalizer(data):
             data[i] = float(data[i])
             if data[i] == 0:
                 data[i] = -1
+            elif maximum == minimum: #look at interpolated t007 for an example of why this is the case we could just make a req that all values must be there to keep the row
+                data[i] = 1
             else:
-                data[i] = (data[i] - minHR) / (maxHR - minHR)
+                data[i] = (data[i] - minimum) / (maximum - minimum)
         except ValueError:
-            data[i] = -1
+            if data[i] != key:
+                data[i] = -1
+            else:
+                pass
 
     return data
 
@@ -33,15 +39,21 @@ configs = config.Config()
 
 
 for file in configs.fileNames:
+    print(file)
     originalName = file
     file = configs.localPath + file
-
+    keys = configs.columnNames
     columnData = {}
 
     for columnName in configs.columnNames:
         columnData[columnName] = []
 
-    dictReader = csv.DictReader(open(file, 'rt'), fieldnames=configs.columnNames,
+    df = pd.read_csv(file)
+    df = df.interpolate(limit = 10)
+    df = df.dropna(thresh = 10) #at least ten (minus 4) values required in a row to keep the row
+    df.to_csv('../InterpolatedData/Interpolated_' + originalName, index=False)
+
+    dictReader = csv.DictReader(open('../InterpolatedData/Interpolated_' + originalName, 'rt'), fieldnames=configs.columnNames,
                                 delimiter=',', quotechar='"')
 
     for row in dictReader:
@@ -49,17 +61,11 @@ for file in configs.fileNames:
             columnData[key].append(row[key])
 
 
-    columnData["Palm.EDA"] = normalizer(columnData["Palm.EDA"])
-    columnData["Heart.Rate"] = normalizer(columnData["Heart.Rate"])
-    columnData["Breathing.Rate"] = normalizer(columnData["Breathing.Rate"])
-    columnData["Perinasal.Perspiration"] = normalizer(columnData["Perinasal.Perspiration"])
-    columnData["Lft.Pupil.Diameter"] = normalizer(columnData["Lft.Pupil.Diameter"])
-    columnData["Rt.Pupil.Diameter"] = normalizer(columnData["Rt.Pupil.Diameter"])
-    
-    csvFileName = 'Normalized_' + originalName
+    for i in range(4,19):
+        columnData[keys[i]] = normalizer(columnData[keys[i]], keys[i])
 
-    keys = configs.columnNames
-    with open('../NormalizedData/'+csvFileName, 'w', newline='', encoding='utf-8') as csvfile:
+
+    with open('../NormalizedData/Normalized_' + originalName, 'w', newline='', encoding='utf-8') as csvfile:
         writer = csv.writer(csvfile, delimiter = ',')
         writer.writerows(zip(*[columnData[key] for key in keys]))
 
