@@ -1,7 +1,11 @@
-import pandas as pd
-import config
 import csv
 
+import pandas as pd
+
+from Processing import config
+
+
+###function to take window average over the normalized data
 def rolling_mean(file, columnData, window_size):
 
     keys = ["Time", "Drive", "Stimulus", "Failure", "Palm.EDA", "Heart.Rate", "Breathing.Rate",
@@ -23,15 +27,15 @@ def rolling_mean(file, columnData, window_size):
 
     return df2
 
+
+
 configs = config.Config()
 
 for file in configs.normalizedFileNames:
 
     originalName = file
     file = configs.localPathNormalized + file
-
     csvFileName = 'Averaged_' + originalName
-
     columnData = {}
 
     for columnName in configs.columnNames:
@@ -45,4 +49,5 @@ for file in configs.normalizedFileNames:
             columnData[key].append(row[key])
 
     df = rolling_mean(file, columnData, configs.window_size)
-    df.to_csv('../RollingAverageData/' + csvFileName, sep=',')
+    df = df.dropna(thresh=configs.thresh)  # at least ten (minus 4) values required in a row to keep the row
+    df.to_csv('../RollingAverageData/' + csvFileName, sep=',', index=False)
