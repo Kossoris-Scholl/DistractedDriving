@@ -49,4 +49,5 @@ for file in configs.normalizedFileNames:
             columnData[key].append(row[key])
 
     df = rolling_mean(file, columnData, configs.window_size)
+    df = df.dropna(thresh=configs.thresh)  # at least ten (minus 4) values required in a row to keep the row
     df.to_csv('../RollingAverageData/' + csvFileName, sep=',', index=False)
