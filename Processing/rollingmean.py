@@ -50,4 +50,4 @@ for file in configs.normalizedFileNames:
 
     df = rolling_mean(file, columnData, configs.window_size)
     df = df.dropna(thresh=configs.thresh)  # at least ten (minus 4) values required in a row to keep the row
-    df.to_csv('../RollingAverageData/' + csvFileName, sep=',', index=False)
+    df.to_csv(configs.localPathAverage + csvFileName, sep=',', index=False)
