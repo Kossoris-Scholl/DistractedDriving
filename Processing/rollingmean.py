@@ -49,4 +49,4 @@ for file in configs.normalizedFileNames:
             columnData[key].append(row[key])
 
     df = rolling_mean(file, columnData, configs.window_size)
-    df.to_csv('../RollingAverageData/' + csvFileName, sep=',', index = False)
+    df.to_csv('../RollingAverageData/' + csvFileName, sep=',', index=False)
