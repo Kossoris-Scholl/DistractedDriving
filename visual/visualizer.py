@@ -21,7 +21,7 @@ if columnCompare not in configs.columnNames:
     print("Invalid Column Name!")
     sys.exit()
 
-file = "/Users/NA/Desktop/Independent Study/NormalizedData/Normalized_T" + filenum + ".csv"
+file = configs.localPathAverage + "Averaged_Normalized_T" + filenum + ".csv"
 
 for columnName in configs.columnNames:
     columnData[columnName] = []
