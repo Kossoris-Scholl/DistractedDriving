@@ -19,3 +19,4 @@ __pycache__/config.cpython-35.pyc
 Processing/__pycache__/config.cpython-35.pyc
 
 config.py
+*.pyc
