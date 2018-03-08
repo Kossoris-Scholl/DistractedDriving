@@ -45,7 +45,7 @@ prevTime = 1
 
 # Cycle through data and display new graph for each test run
 for i in range(1, len(columnData["Time"])):
-    if int(columnData["Time"][i]) < prevTime and count != 0:
+    if int(columnData["Time"][i]) < prevTime and count != 0 or i == len(columnData["Time"])-1:
         x = list(map(int, columnData["Time"][start:i-1]))
         y = list(map(float, columnData[columnCompare][start:i-1]))
         c = np.array([]);
@@ -67,7 +67,7 @@ for i in range(1, len(columnData["Time"])):
         plt.show()
         start = i
         count += 1
-        prevTime = 1
+        prevTime = int(columnData["Time"][i])
 
     if count == 0:
         count = 1
