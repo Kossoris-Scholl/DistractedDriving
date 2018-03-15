@@ -48,4 +48,6 @@ cfm = metrics.confusion_matrix(y_train, y_pred)
 print(cfm)
 
 ##Should cross val score be done on training or test?
+print("Confusion Matrix:")
 print(cross_val_score(knn, X_test, y_test))
+print("-----------------")
