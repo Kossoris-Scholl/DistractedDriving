@@ -36,7 +36,7 @@ def knn(balanced=False):
     y_test = y_test.values.astype('int')
 
     # Instantiate the model with 50 neighbors.
-    knn = sklearn.neighbors.KNeighborsClassifier(n_neighbors=50)
+    knn = neighbors.KNeighborsClassifier(n_neighbors=50)
 
     # Fit the model on the training data.
     knn.fit(X_train, y_train)
@@ -75,6 +75,6 @@ df['Stimulus'] = df['Stimulus'].replace([2, 3, 4, 5, 6], 1)
 
 print("--------------------- Before balance ------------------------\n")
 knn(False)
-print("--------------------- After balance ------------------------\n")
+print("\n--------------------- After balance ------------------------\n")
 knn(True)
 
