@@ -42,10 +42,14 @@ np.savetxt("results.csv", predictions, delimiter=",")
 mse = metrics.mean_squared_error(y_true=y_test, y_pred=predictions)
 print("Mean squared error: " + str(mse))
 
-##Should confusion matrix be done on training or test
+# Should confusion matrix be done on training or test
 y_pred = knn.predict(X_train)
+
+print("Confusion Matrix:")
 cfm = metrics.confusion_matrix(y_train, y_pred)
 print(cfm)
+print("-----------------")
 
-##Should cross val score be done on training or test?
-print(cross_val_score(knn, X_test, y_test))
+# Should cross val score be done on training or test?
+print("Cross Validation Scores: " + str(cross_val_score(knn, X_test, y_test)))
+
