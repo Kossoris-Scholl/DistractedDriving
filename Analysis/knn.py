@@ -44,10 +44,12 @@ print("Mean squared error: " + str(mse))
 
 # Should confusion matrix be done on training or test
 y_pred = knn.predict(X_train)
+
+print("Confusion Matrix:")
 cfm = metrics.confusion_matrix(y_train, y_pred)
 print(cfm)
+print("-----------------")
 
 # Should cross val score be done on training or test?
-print("Confusion Matrix:")
-print(cross_val_score(knn, X_test, y_test))
-print("-----------------")
+print("Cross Validation Scores: " + str(cross_val_score(knn, X_test, y_test)))
+
