@@ -17,9 +17,9 @@ def knn(balanced=False):
     df['Stimulus'] = df['Stimulus'].replace([2, 3, 4, 5, 6], 1)
 
     if balanced:
-        # Group by Stimulus column so we can access number of each type of stimulus
+        # Group by Stimulus column so we can access count of each type of stimulus (0 and 1)
         g = df.groupby('Stimulus')
-        # Get equal number of each type of stimulus (0 or 1)
+        # Get equal count of each type of stimulus (0 or 1) in new dataframe g
         g = g.apply(lambda x: x.sample(g.size().min()).reset_index(drop=True))
         X = g[['Palm.EDA', 'Heart.Rate', 'Breathing.Rate', 'Perinasal.Perspiration', 'Speed', 'Acceleration', 'Brake',
                'Steering', 'LaneOffset', 'Lane.Position', 'Distance', 'Gaze.X.Pos', 'Gaze.Y.Pos', 'Lft.Pupil.Diameter',
