@@ -48,7 +48,10 @@ def rf(balanced=False):
     # Test the model & return calculate mean square error
     predictions = rf.predict(X_test)
 
-    np.savetxt("results.csv", predictions, delimiter=",")
+    if balanced:
+        np.savetxt("rfresults-balanced.csv", predictions, delimiter=",")
+    else:
+        np.savetxt("rfresults.csv", predictions, delimiter=",")
 
     mse = metrics.mean_squared_error(y_true=y_test, y_pred=predictions)
     print("Mean squared error: " + str(mse))
@@ -62,10 +65,14 @@ def rf(balanced=False):
 
     print("Cross Validation Scores: " + str(cross_val_score(rf, X_test, y_test)))
 
-    metrics.f1_score(y_test, y_pred, average='macro')
-    metrics.f1_score(y_test, y_pred, average='micro')
-    metrics.f1_score(y_test, y_pred, average='weighted')
-    metrics.f1_score(y_test, y_pred, average=None)
+    print("F1 Score: Macro")
+    print(metrics.f1_score(y_test, y_pred, average='macro'))
+    print("F1 Score: Micro")
+    print(metrics.f1_score(y_test, y_pred, average='micro'))
+    print("F1 Score: Weighted")
+    print(metrics.f1_score(y_test, y_pred, average='weighted'))
+    print("F1 Score: None")
+    print(metrics.f1_score(y_test, y_pred, average=None))
 
 
 # Concatenate all the files from each person into one dataframe
@@ -77,6 +84,7 @@ df.to_csv("concat.csv", sep=',', index=False)
 # Binary classification
 df['Stimulus'] = df['Stimulus'].replace([2, 3, 4, 5, 6], 1)
 
+print("--------------------- RF Results ------------------------\n")
 print("--------------------- Before balance ------------------------\n")
 rf(False)
 print("\n--------------------- After balance ------------------------\n")

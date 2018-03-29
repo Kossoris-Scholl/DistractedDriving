@@ -41,15 +41,16 @@ def knn(balanced=False):
     # Fit the model on the training data.
     knn.fit(X_train, y_train)
 
-    print("--------------------- KNN Results ------------------------\n")
-
     # See how the model performs on the test data.
     print("Accuracy: " + str(knn.score(X_test, y_test)))
 
     # Test the model & return calculate mean square error
     predictions = knn.predict(X_test)
 
-    np.savetxt("knnresults.csv", predictions, delimiter=",")
+    if balanced:
+        np.savetxt("knnresults-balanced.csv", predictions, delimiter=",")
+    else:
+        np.savetxt("knnresults.csv", predictions, delimiter=",")
 
     mse = metrics.mean_squared_error(y_true=y_test, y_pred=predictions)
     print("Mean squared error: " + str(mse))
@@ -82,6 +83,7 @@ df.to_csv("concat.csv", sep=',', index=False)
 # Binary classification
 df['Stimulus'] = df['Stimulus'].replace([2, 3, 4, 5, 6], 1)
 
+print("--------------------- KNN Results ------------------------\n")
 print("--------------------- Before balance ------------------------\n")
 knn(False)
 print("\n--------------------- After balance ------------------------\n")

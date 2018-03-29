@@ -37,7 +37,7 @@ def svm(balanced=False):
     X_test = X_test.values.reshape(-1, 15)
     y_test = y_test.values.astype('int')
 
-    svc = SVC(kernel='rbf', C = 100)
+    svc = SVC(kernel='rbf', C = 1000)
 
     svc.fit(X_train, y_train)
 
@@ -47,7 +47,10 @@ def svm(balanced=False):
     # Test the model & return calculate mean square error
     predictions = svc.predict(X_test)
 
-    np.savetxt("results.csv", predictions, delimiter=",")
+    if balanced:
+        np.savetxt("svmresults-balanced.csv", predictions, delimiter=",")
+    else:
+        np.savetxt("svmresults.csv", predictions, delimiter=",")
 
     mse = metrics.mean_squared_error(y_true=y_test, y_pred=predictions)
     print("Mean squared error: " + str(mse))
@@ -61,9 +64,13 @@ def svm(balanced=False):
 
     print("Cross Validation Scores: " + str(cross_val_score(svc, X_test, y_test)))
 
+    print("F1 Score: Macro")
     print(metrics.f1_score(y_test, y_pred, average='macro'))
+    print("F1 Score: Micro")
     print(metrics.f1_score(y_test, y_pred, average='micro'))
+    print("F1 Score: Weighted")
     print(metrics.f1_score(y_test, y_pred, average='weighted'))
+    print("F1 Score: None")
     print(metrics.f1_score(y_test, y_pred, average=None))
 
 
@@ -74,6 +81,8 @@ df.to_csv("concat.csv", sep=',', index=False)
 
 # Binary classification
 df['Stimulus'] = df['Stimulus'].replace([2, 3, 4, 5, 6], 1)
+
+print("--------------------- SVM Results ------------------------\n")
 
 print("--------------------- Before balance ------------------------\n")
 svm(False)
