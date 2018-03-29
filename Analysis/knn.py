@@ -41,13 +41,15 @@ def knn(balanced=False):
     # Fit the model on the training data.
     knn.fit(X_train, y_train)
 
+    print("--------------------- KNN Results ------------------------\n")
+
     # See how the model performs on the test data.
     print("Accuracy: " + str(knn.score(X_test, y_test)))
 
     # Test the model & return calculate mean square error
     predictions = knn.predict(X_test)
 
-    np.savetxt("results.csv", predictions, delimiter=",")
+    np.savetxt("knnresults.csv", predictions, delimiter=",")
 
     mse = metrics.mean_squared_error(y_true=y_test, y_pred=predictions)
     print("Mean squared error: " + str(mse))
@@ -61,10 +63,14 @@ def knn(balanced=False):
 
     print("Cross Validation Scores: " + str(cross_val_score(knn, X_test, y_test)))
 
-    metrics.f1_score(y_test, y_pred, average='macro')
-    metrics.f1_score(y_test, y_pred, average='micro')
-    metrics.f1_score(y_test, y_pred, average='weighted')
-    metrics.f1_score(y_test, y_pred, average=None)
+    print("F1 Score: Macro")
+    print(metrics.f1_score(y_test, y_pred, average='macro'))
+    print("F1 Score: Micro")
+    print(metrics.f1_score(y_test, y_pred, average='micro'))
+    print("F1 Score: Weighted")
+    print(metrics.f1_score(y_test, y_pred, average='weighted'))
+    print("F1 Score: None")
+    print(metrics.f1_score(y_test, y_pred, average=None))
 
     
 # Concatenate all the files from each person into one dataframe

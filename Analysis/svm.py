@@ -37,7 +37,7 @@ def svm(balanced=False):
     X_test = X_test.values.reshape(-1, 15)
     y_test = y_test.values.astype('int')
 
-    svc = SVC(kernel='linear')
+    svc = SVC(kernel='rbf', C = 100)
 
     svc.fit(X_train, y_train)
 
@@ -61,10 +61,10 @@ def svm(balanced=False):
 
     print("Cross Validation Scores: " + str(cross_val_score(svc, X_test, y_test)))
 
-    metrics.f1_score(y_test, y_pred, average='macro')
-    metrics.f1_score(y_test, y_pred, average='micro')
-    metrics.f1_score(y_test, y_pred, average='weighted')
-    metrics.f1_score(y_test, y_pred, average=None)
+    print(metrics.f1_score(y_test, y_pred, average='macro'))
+    print(metrics.f1_score(y_test, y_pred, average='micro'))
+    print(metrics.f1_score(y_test, y_pred, average='weighted'))
+    print(metrics.f1_score(y_test, y_pred, average=None))
 
 
 configs = config.Config()
