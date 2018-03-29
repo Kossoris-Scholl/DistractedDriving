@@ -52,7 +52,6 @@ def knn(balanced=False):
     mse = metrics.mean_squared_error(y_true=y_test, y_pred=predictions)
     print("Mean squared error: " + str(mse))
     
-    # Should confusion matrix be done on training or test
     y_pred = knn.predict(X_test)
 
     print("Confusion Matrix:")
@@ -60,8 +59,12 @@ def knn(balanced=False):
     print(cfm)
     print("-----------------")
 
-    # Should cross val score be done on training or test?
     print("Cross Validation Scores: " + str(cross_val_score(knn, X_test, y_test)))
+
+    metrics.f1_score(y_test, y_pred, average='macro')
+    metrics.f1_score(y_test, y_pred, average='micro')
+    metrics.f1_score(y_test, y_pred, average='weighted')
+    metrics.f1_score(y_test, y_pred, average=None)
 
     
 # Concatenate all the files from each person into one dataframe

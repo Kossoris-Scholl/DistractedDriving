@@ -1,14 +1,13 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split, cross_val_score, cross_val_predict, KFold
-from sklearn import metrics
-from sklearn.svm import SVC
+from sklearn import metrics, ensemble
 import glob
 import os
 from Processing import config
 import numpy as np
 
 
-def svm(balanced=False):
+def rf(balanced=False):
     if balanced:
         # Group by Stimulus column so we can access count of each type of stimulus (0 and 1)
         g = df.groupby('Stimulus')
@@ -37,29 +36,31 @@ def svm(balanced=False):
     X_test = X_test.values.reshape(-1, 15)
     y_test = y_test.values.astype('int')
 
-    svc = SVC(kernel='linear')
+    # Instantiate the model with 100 estimators
+    rf = ensemble.RandomForestClassifier(n_estimators = 100)
 
-    svc.fit(X_train, y_train)
+    # Fit the model on the training data.
+    rf.fit(X_train, y_train)
 
     # See how the model performs on the test data.
-    print("Accuracy: " + str(svc.score(X_test, y_test)))
+    print("Accuracy: " + str(rf.score(X_test, y_test)))
 
     # Test the model & return calculate mean square error
-    predictions = svc.predict(X_test)
+    predictions = rf.predict(X_test)
 
     np.savetxt("results.csv", predictions, delimiter=",")
 
     mse = metrics.mean_squared_error(y_true=y_test, y_pred=predictions)
     print("Mean squared error: " + str(mse))
 
-    y_pred = svc.predict(X_test)
+    y_pred = rf.predict(X_test)
 
     print("Confusion Matrix:")
     cfm = metrics.confusion_matrix(y_test, y_pred)
     print(cfm)
     print("-----------------")
 
-    print("Cross Validation Scores: " + str(cross_val_score(svc, X_test, y_test)))
+    print("Cross Validation Scores: " + str(cross_val_score(rf, X_test, y_test)))
 
     metrics.f1_score(y_test, y_pred, average='macro')
     metrics.f1_score(y_test, y_pred, average='micro')
@@ -67,6 +68,7 @@ def svm(balanced=False):
     metrics.f1_score(y_test, y_pred, average=None)
 
 
+# Concatenate all the files from each person into one dataframe
 configs = config.Config()
 path = configs.localPathAverage
 df = pd.concat((pd.read_csv(f) for f in glob.glob(os.path.join(path, '*.csv'))))
@@ -76,7 +78,7 @@ df.to_csv("concat.csv", sep=',', index=False)
 df['Stimulus'] = df['Stimulus'].replace([2, 3, 4, 5, 6], 1)
 
 print("--------------------- Before balance ------------------------\n")
-svm(False)
-
+rf(False)
 print("\n--------------------- After balance ------------------------\n")
-svm(True)
+rf(True)
+
