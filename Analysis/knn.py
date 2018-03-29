@@ -47,12 +47,14 @@ def knn(balanced=False):
     # Test the model & return calculate mean square error
     predictions = knn.predict(X_test)
 
-    np.savetxt("results.csv", predictions, delimiter=",")
+    if balanced:
+        np.savetxt("knnresults-balanced.csv", predictions, delimiter=",")
+    else:
+        np.savetxt("knnresults.csv", predictions, delimiter=",")
 
     mse = metrics.mean_squared_error(y_true=y_test, y_pred=predictions)
     print("Mean squared error: " + str(mse))
     
-    # Should confusion matrix be done on training or test
     y_pred = knn.predict(X_test)
 
     print("Confusion Matrix:")
@@ -60,8 +62,16 @@ def knn(balanced=False):
     print(cfm)
     print("-----------------")
 
-    # Should cross val score be done on training or test?
     print("Cross Validation Scores: " + str(cross_val_score(knn, X_test, y_test)))
+
+    print("F1 Score: Macro")
+    print(metrics.f1_score(y_test, y_pred, average='macro'))
+    print("F1 Score: Micro")
+    print(metrics.f1_score(y_test, y_pred, average='micro'))
+    print("F1 Score: Weighted")
+    print(metrics.f1_score(y_test, y_pred, average='weighted'))
+    print("F1 Score: None")
+    print(metrics.f1_score(y_test, y_pred, average=None))
 
     
 # Concatenate all the files from each person into one dataframe
@@ -73,6 +83,7 @@ df.to_csv("concat.csv", sep=',', index=False)
 # Binary classification
 df['Stimulus'] = df['Stimulus'].replace([2, 3, 4, 5, 6], 1)
 
+print("--------------------- KNN Results ------------------------\n")
 print("--------------------- Before balance ------------------------\n")
 knn(False)
 print("\n--------------------- After balance ------------------------\n")
