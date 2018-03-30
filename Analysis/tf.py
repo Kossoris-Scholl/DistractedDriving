@@ -27,10 +27,6 @@ X = df[['Palm.EDA', 'Heart.Rate', 'Breathing.Rate', 'Perinasal.Perspiration', 'S
         'Rt.Pupil.Diameter']]
 Y = df[['Stimulus', 'Anti.Stim']]
 
-print(df['Stimulus'].shape)
-print(anti_stim.shape)
-print(len(Y.shape))
-
 # Split features and labels into training and test sets
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, random_state=42)
 
