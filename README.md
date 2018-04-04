@@ -1,6 +1,8 @@
 # DistractedDriving
 Distracted driving event detection.
 
+##Processing
+
 Normalizer:
 This file does 3 things:
 1) Data Removal. We r1emove any zeroes for which it does not make sense to include it in the data. For instance, zero heart rate and breathing rate are not possible, so these were changed to NaNs.
@@ -13,4 +15,5 @@ This file has one main function: take a specified rolling window average over th
 Visualizer:
 This file allows you to compare one feature over time per each run.
 
-Processing
+
+
