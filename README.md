@@ -1,5 +1,5 @@
 # DistractedDriving
-Distracted driving event detection.
+## Distracted driving event detection.
 
 Normalizer:
 This file does 3 things:
