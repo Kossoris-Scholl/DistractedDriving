@@ -9,3 +9,6 @@ This file does 3 things:
 
 Rolling Mean:
 This file has one main function: take a specified rolling window average over the normalized data using pandas rolling mean function.
+
+Visualizer:
+This file allows you to compare one feature over time per each run.
