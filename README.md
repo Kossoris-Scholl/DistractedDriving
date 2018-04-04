@@ -1,7 +1,7 @@
 # DistractedDriving
 The National Highway Traffic Safety Administration (NHTSA) reports that 10 percent of fatal crashes in 2015 were classified as distraction-affected crashes. In an effort to make driving safer, we introduce driving stimuli classification to detect driver distraction. We used a simulated driving dataset composed of four different types of stimuli: no distraction, cognitive distraction, emotional distraction, and sensorimotor distraction. Using several machine learning algorithms, we can detect when one of the aforementioned stimuli was applied to a driver, which often leads to distraction of the driver. The classifiers were trained and tested on several response variables during driving: speed, acceleration, brake force, steering and lane position signals, perinasal electrodermal activity (EDA), palm EDA, heart rate, breathing rate, and gaze position. We measured performance of the classifiers using standard accuracy, cross validation, and F1 scores. Results show that machine learning algorithms can effectively detect distracted driving stimuli with a relatively high degree of certainty.
 
-# Setup Instructions
+## Setup Instructions
 Python 3.5 or higher. 
 Dependencies: Pandas, Sklearn
 
