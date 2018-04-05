@@ -42,8 +42,11 @@ def rf(balanced=False):
     # Fit the model on the training data.
     rf.fit(X_train, y_train)
 
+    results = {}
+
     # See how the model performs on the test data.
-    print("Accuracy: " + str(rf.score(X_test, y_test)))
+    results['accuracy'] = rf.score(X_test, y_test)
+    print("Accuracy: " + str(results['accuracy']))
 
     # Test the model & return calculate mean square error
     predictions = rf.predict(X_test)
@@ -53,26 +56,33 @@ def rf(balanced=False):
     else:
         np.savetxt("rfresults.csv", predictions, delimiter=",")
 
-    mse = metrics.mean_squared_error(y_true=y_test, y_pred=predictions)
-    print("Mean squared error: " + str(mse))
+    results['mse'] = metrics.mean_squared_error(y_true=y_test, y_pred=predictions)
+    print("Mean squared error: " + str(results['mse']))
 
     y_pred = rf.predict(X_test)
 
     print("Confusion Matrix:")
-    cfm = metrics.confusion_matrix(y_test, y_pred)
-    print(cfm)
+    results['cfm'] = metrics.confusion_matrix(y_test, y_pred)
+    print(results['cfm'])
     print("-----------------")
 
-    print("Cross Validation Scores: " + str(cross_val_score(rf, X_test, y_test)))
+    results['cross_val_score'] = cross_val_score(rf, X_test, y_test)
+    print("Cross Validation Scores: " + str(results['cross_val_score']))
 
+    results['f1_macro'] = metrics.f1_score(y_test, y_pred, average='macro')
     print("F1 Score: Macro")
-    print(metrics.f1_score(y_test, y_pred, average='macro'))
+    print(results['f1_macro'])
+    results['f1_micro'] = metrics.f1_score(y_test, y_pred, average='micro')
     print("F1 Score: Micro")
-    print(metrics.f1_score(y_test, y_pred, average='micro'))
+    print(results['f1_micro'])
+    results['f1_weighted'] = metrics.f1_score(y_test, y_pred, average='weighted')
     print("F1 Score: Weighted")
-    print(metrics.f1_score(y_test, y_pred, average='weighted'))
+    print(results['f1_weighted'])
+    results['f1_none'] = metrics.f1_score(y_test, y_pred, average=None)
     print("F1 Score: None")
-    print(metrics.f1_score(y_test, y_pred, average=None))
+    print(results['f1_none'])
+
+    return results
 
 
 # Concatenate all the files from each person into one dataframe
@@ -84,9 +94,11 @@ df.to_csv("concat.csv", sep=',', index=False)
 # Binary classification
 df['Stimulus'] = df['Stimulus'].replace([2, 3, 4, 5, 6], 1)
 
-print("--------------------- RF Results ------------------------\n")
-print("--------------------- Before balance ------------------------\n")
-rf(False)
-print("\n--------------------- After balance ------------------------\n")
-rf(True)
+def main():
+    print("--------------------- RF Results ------------------------\n")
+    print("--------------------- Before balance ------------------------\n")
+    unbalanced = rf(False)
+    print("\n--------------------- After balance ------------------------\n")
+    balanced = rf(True)
+    return unbalanced, balanced
 

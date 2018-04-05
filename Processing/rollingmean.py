@@ -31,26 +31,26 @@ def rolling_mean(file, columnData, window_size):
     return df2
 
 
+def main():
+    configs = config.Config()
 
-configs = config.Config()
+    for file in configs.normalizedFileNames:
 
-for file in configs.normalizedFileNames:
+        original_name = file
+        file = configs.localPathNormalized + file
+        csv_file_name = 'Averaged_' + original_name
+        column_data = {}
 
-    originalName = file
-    file = configs.localPathNormalized + file
-    csvFileName = 'Averaged_' + originalName
-    columnData = {}
+        for columnName in configs.columnNames:
+            column_data[columnName] = []
 
-    for columnName in configs.columnNames:
-        columnData[columnName] = []
+        dict_reader = csv.DictReader(open(file, 'rt'), fieldnames=configs.columnNames,
+                                    delimiter=',', quotechar='"')
 
-    dictReader = csv.DictReader(open(file, 'rt'), fieldnames=configs.columnNames,
-                                delimiter=',', quotechar='"')
+        for row in dict_reader:
+            for key in row:
+                column_data[key].append(row[key])
 
-    for row in dictReader:
-        for key in row:
-            columnData[key].append(row[key])
-
-    df = rolling_mean(file, columnData, configs.window_size)
-    df = df.dropna()  # at least ten (minus 4) values required in a row to keep the row
-    df.to_csv(configs.localPathAverage + csvFileName, sep=',', index=False)
+        df = rolling_mean(file, column_data, configs.window_size)
+        df = df.dropna()  # at least ten (minus 4) values required in a row to keep the row
+        df.to_csv(configs.localPathAverage + csv_file_name, sep=',', index=False)
