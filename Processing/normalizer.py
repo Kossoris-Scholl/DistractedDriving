@@ -35,47 +35,48 @@ def normalizer(data, key):
     return data
 
 
-configs = config.Config()
+def main():
+    configs = config.Config()
 
-for file in configs.fileNames:
+    for file in configs.fileNames:
 
-    originalName = file
-    file = configs.localPath + file
-    keys = configs.columnNames
-    columnData = {}
+        original_name = file
+        file = configs.localPath + file
+        keys = configs.columnNames
+        column_data = {}
 
-    for columnName in configs.columnNames:
-        columnData[columnName] = []
-
-
-    ### pre-normalization: removing zeroes, interpolation, and removing missing segments
-    df = pd.read_csv(file)
-
-    #remove zeroes from categories in which it doesn't make sense to have a zero value
-    df['Heart.Rate'].replace(0, np.nan, inplace=True)
-    df['Breathing.Rate'].replace(0, np.nan, inplace=True)
-
-    #interpolate the data linearly to fill in missing values via specified limit, default is forward
-    df = df.interpolate(limit = configs.limit)
-
-    #after interpolation, remove rows with missing data in specified amount of columns
-    df = df.dropna(thresh = configs.thresh) #at least ten (minus 4) values required in a row to keep the row
-
-    df.to_csv(configs.localPathInterpolated + 'Interpolated_' + originalName, index=False)
+        for columnName in configs.columnNames:
+            column_data[columnName] = []
 
 
-    ###process normalization
-    dictReader = csv.DictReader(open(configs.localPathInterpolated + 'Interpolated_' + originalName, 'rt'), fieldnames=configs.columnNames,
-                                delimiter=',', quotechar='"')
+        ### pre-normalization: removing zeroes, interpolation, and removing missing segments
+        df = pd.read_csv(file)
 
-    for row in dictReader:
-        for key in row:
-            columnData[key].append(row[key])
+        #remove zeroes from categories in which it doesn't make sense to have a zero value
+        df['Heart.Rate'].replace(0, np.nan, inplace=True)
+        df['Breathing.Rate'].replace(0, np.nan, inplace=True)
 
-    for i in range(4,19):
-        columnData[keys[i]] = normalizer(columnData[keys[i]], keys[i])
+        #interpolate the data linearly to fill in missing values via specified limit, default is forward
+        df = df.interpolate(limit = configs.limit)
 
-    with open(configs.localPathNormalized + 'Normalized_' + originalName, 'w', newline='', encoding='utf-8') as csvfile:
-        writer = csv.writer(csvfile, delimiter = ',')
-        writer.writerows(zip(*[columnData[key] for key in keys]))
+        #after interpolation, remove rows with missing data in specified amount of columns
+        df = df.dropna(thresh = configs.thresh) #at least ten (minus 4) values required in a row to keep the row
+
+        df.to_csv(configs.localPathInterpolated + 'Interpolated_' + original_name, index=False)
+
+
+        ###process normalization
+        dictReader = csv.DictReader(open(configs.localPathInterpolated + 'Interpolated_' + original_name, 'rt'), fieldnames=configs.columnNames,
+                                    delimiter=',', quotechar='"')
+
+        for row in dictReader:
+            for key in row:
+                column_data[key].append(row[key])
+
+        for i in range(4,19):
+            column_data[keys[i]] = normalizer(column_data[keys[i]], keys[i])
+
+        with open(configs.localPathNormalized + 'Normalized_' + original_name, 'w', newline='', encoding='utf-8') as csvfile:
+            writer = csv.writer(csvfile, delimiter = ',')
+            writer.writerows(zip(*[column_data[key] for key in keys]))
 
