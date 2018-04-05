@@ -4,7 +4,7 @@ from Analysis import knn, rf, svm
 ############ Configurations #############
 process_data = True
 num_runs = 20
-classifiers = [knn, rf]
+classifiers = [rf]
 #########################################
 
 if process_data:

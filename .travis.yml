@@ -8,3 +8,5 @@ install:
   - pip install -U scikit-learn
   - pip install pandas
 
+script: echo 0
+

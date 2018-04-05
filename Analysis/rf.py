@@ -52,9 +52,9 @@ def rf(balanced=False):
     predictions = rf.predict(X_test)
 
     if balanced:
-        np.savetxt("rfresults-balanced.csv", predictions, delimiter=",")
+        np.savetxt("./Results/rfresults-balanced.csv", predictions, delimiter=",")
     else:
-        np.savetxt("rfresults.csv", predictions, delimiter=",")
+        np.savetxt("./Results/rfresults.csv", predictions, delimiter=",")
 
     results['mse'] = metrics.mean_squared_error(y_true=y_test, y_pred=predictions)
     print("Mean squared error: " + str(results['mse']))
@@ -102,3 +102,4 @@ def main():
     balanced = rf(True)
     return unbalanced, balanced
 
+main()
