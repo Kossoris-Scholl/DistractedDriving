@@ -51,9 +51,9 @@ def svm(balanced=False):
     predictions = svc.predict(X_test)
 
     if balanced:
-        np.savetxt("knnresults-balanced.csv", predictions, delimiter=",")
+        np.savetxt("svmresults-balanced.csv", predictions, delimiter=",")
     else:
-        np.savetxt("knnresults.csv", predictions, delimiter=",")
+        np.savetxt("svmresults.csv", predictions, delimiter=",")
 
     results['mse'] = metrics.mean_squared_error(y_true=y_test, y_pred=predictions)
     print("Mean squared error: " + str(results['mse']))
