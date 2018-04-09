@@ -1,10 +1,12 @@
-from Processing import normalizer, rollingmean
-from Analysis import knn, rf, svm
+from Processing import normalizer, rollingmean, config
+from Analysis import knn, rf, svm, nb, tf
+import pandas as pd
+import glob, os
 
 ############ Configurations #############
 process_data = True
-num_runs = 20
-classifiers = [rf]
+num_runs = 1
+classifiers = [tf]
 #########################################
 
 if process_data:
@@ -12,8 +14,14 @@ if process_data:
     rollingmean.main()
 
 # Used for the report to map the classifier to a printable name
-classifier_names = {knn: 'KNN', rf: 'RF', svm: 'SVM'}
+classifier_names = {knn: 'KNN', rf: 'RF', svm: 'SVM', nb: 'NB', tf: 'TF'}
 final_results = {}
+
+# Concatenate all the files from each person into one dataframe
+configs = config.Config()
+path = configs.localPathAverage
+df = pd.concat((pd.read_csv(f) for f in glob.glob(os.path.join(path, '*.csv'))))
+df.to_csv("concat.csv", sep=',', index=False)
 
 # Go through each of the specified classifiers
 for classifier in classifiers:

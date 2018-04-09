@@ -88,7 +88,6 @@ def svm(balanced=False):
 configs = config.Config()
 path = configs.localPathAverage
 df = pd.concat((pd.read_csv(f) for f in glob.glob(os.path.join(path, '*.csv'))))
-df.to_csv("concat.csv", sep=',', index=False)
 
 # Binary classification
 df['Stimulus'] = df['Stimulus'].replace([2, 3, 4, 5, 6], 1)
