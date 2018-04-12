@@ -6,21 +6,21 @@ Python 3.5 or higher.
 Dependencies: Pandas, Sklearn
 
 ## Processing 
-###Unity-Based Normalization
+### Unity-Based Normalization
 In order to account for differences in each participant's range of each feature, we normalized the data through a standard normalization function. This function normalizes each column of data so that each value is between 0 and 1, inclusive.
 
 normalized data = (data - minimum) / (maximum - minimum)
 
-###Forward Fill Linear Interpolation
+### Forward Fill Linear Interpolation
 This process forward fills missing data in segments of a user specified amount, allowing for more possible data points to be analyzed. We utilized an interpolation function from the pandas library. 
 
-###Data Removal
+### Data Removal
 We removed any zeroes for which it does not make sense to include it in the data. For instance, zero heart rate and breathing rate are not possible, so these were changed to NaNs. Additionally, after interpolation we removed any continuous missing segments of data that were longer than a user specified amount.
 
-###Rolling Mean
+### Rolling Mean
 In order to dampen large differences over small amounts of time and to reduce outliers in data, we took the mean of each consecutive 10 second interval for each feature. We took a specified rolling window average over the normalized data using pandas rolling mean function.
 
-###Balancing
+### Balancing
 In order to ensure classifiers were not biased toward one class, we also tested balanced training data where 50% of the input data was labeled distracted and the other 50% was labeled undistracted.​
 
 ## Visualization
@@ -35,14 +35,14 @@ This file allows you to compare one feature over time per each run.
 ### Neural Network
 
 ## Evaluation
-###Accuracy
+### Accuracy
 Baseline accuracy of our data, using a basic percentage of correctly-classified data points
 
-###Mean Squared Error
+### Mean Squared Error
 Mean squared error regression loss between ground truth and estimated target values.
 
-###F1 Scores
+### F1 Scores
 Weighted average of precision and recall where its best value is 1 and worst value is 0. Results include Macro, Micro, and Weighted F1 scores.
 
-###Confusion Matrix
+### Confusion Matrix
 Count of true positives, true negatives, false positives, and false negatives.
