@@ -28,7 +28,7 @@ def rf(balanced=False):
         y = df['Stimulus']
 
     # Split features and labels into training and test sets
-    X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(X, y)
 
     # Reshape data to appropriate numpy array, values is numpy representation
     X_train = X_train.values.reshape(-1, 15)

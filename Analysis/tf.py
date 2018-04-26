@@ -36,7 +36,7 @@ def tf_run(balanced=False):
         Y = df[['Stimulus', 'Anti.Stim']]
 
     # Split features and labels into training and test sets
-    X_train, X_test, Y_train, Y_test = train_test_split(X, Y, random_state=42)
+    X_train, X_test, Y_train, Y_test = train_test_split(X, Y)
 
     # Parameters
     learning_rate = 0.001
